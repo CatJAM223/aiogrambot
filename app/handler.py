@@ -1,5 +1,5 @@
-from aiogram import Router, F
-from aiogram.filters import CommandStart
+from aiogram import Router, F, types
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
@@ -16,6 +16,10 @@ async def cmd_start(message: Message):
     await message.answer('Приветсвую дорогие студенты. Данный бот будет оповещать вас'),
     await message.answer('Выберите свою роль:', reply_markup=kb.rules)
     await Group.role.set()
+
+@router.message(Command('message'))
+async def cmd_start(message: types.Message):
+    await message.answer(types.chat_full_info)
 
 @router.message(F.text == 'Студент')
 async def group(message: Message, state: FSMContext):

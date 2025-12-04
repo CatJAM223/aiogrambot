@@ -1,7 +1,8 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 rules = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='Студент'), KeyboardButton(text='Администрация')]
+    [KeyboardButton(text='Студент'), 
+     KeyboardButton(text='Администрация')]
 ], resize_keyboard=True, input_field_placeholder='Выберите свою роль')
 
 students = ['1-1П9', '1-2П9', '2-1П9', '2-2П9', '3-1П9','3-2П9', '4-1П9', '4-2П9',
@@ -18,4 +19,4 @@ async def inline_students():
     Keyboard = ReplyKeyboardBuilder()
     for student in students:
         Keyboard.add(KeyboardButton(text=student))
-    return Keyboard.adjust(3).as_markup()
+    return Keyboard.adjust(4).as_markup()
