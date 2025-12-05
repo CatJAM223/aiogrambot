@@ -17,7 +17,6 @@ async def create_admin(id: int):
 
         if not admin:
             session.add(Admin(tg_id=id))
-            await session.commit()
 
 async def checkForAdmin(id: int):
     async with async_session() as session:
@@ -32,8 +31,15 @@ async def checkForGroup(id: int):
         
 async def changeGroup(id: int):
     async with async_session() as session:
-        change = await session.scalar(select(User.tg_id).where(User.tg_id == id))
+        change = await session.scalar(select(User).where(User.tg_id == id))
         if change:
-            session.delete(User.tg_id, User.group)
+            await session.delete(change)
+            await session.commit()
         else:
-            return True
+            return False
+        
+async def write(id: int, group: str):
+    async with async_session() as session:
+        group = await session.scalar(select(User.group).where(User.tg_id == id))
+        if group:
+            return group

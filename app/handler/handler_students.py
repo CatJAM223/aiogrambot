@@ -5,13 +5,22 @@ from aiogram.types import Message
 from app.keyboards import students
 import app.keyboards as kb
 import app.database.requests as rq
+from asyncio import sleep
 
 user = Router()
 
 @user.message(CommandStart())
 async def cmd_start(message: Message):
     await message.answer('Приветсвую дорогие студенты. Данный бот будет оповещать вас'),
+    await sleep(1.5)
     await message.answer('Выберите свою роль:', reply_markup=kb.rules)
+
+@user.message(F.text, Command('change'))
+async def change(message: Message):
+    if await rq.changeGroup(message.from_user.id) == True:
+        await message.answer('Вы и так не состоите в группе')
+    else:
+        await message.answer('Теперь вы не состоите в группе')
 
 @user.message(F.text == 'Студент')
 async def group(message: Message):
@@ -26,13 +35,8 @@ async def stranger_go_away(message: Message):
             else:
                 await rq.set_user(message.from_user.id, message.text)
                 await message.answer(f'Теперь вы студент группы: {await rq.checkForGroup(message.from_user.id)}')
+                await sleep(1.5)
                 await message.answer(f'Хотите сменить группу? Отправте команду /change')
         else:
             await message.answer('Вы являетесь администратором, а не студентом')
 
-@user.message(Command('change'))
-async def change(message: Message):
-    if await rq.changeGroup(message.from_user.id) == True:
-        await message.answer('Вы и так не состоите в группе')
-    else:
-        await message.answer('Теперь вы не состоите в группе')
