@@ -1,7 +1,7 @@
 from peewee import *
-from app.database.peeweemodel import Admin
+from app.database.peeweemodel import User
 
-async def initadmin(id: int):
-    if not Admin:
-        admin_id = Admin.create(tg_id = id)
-
+async def init_admin(tg_id: int, username: str):
+    admin = User.get_or_none(User.tg_id == id)
+    if not admin:
+        
